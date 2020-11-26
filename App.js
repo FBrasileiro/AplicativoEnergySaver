@@ -1,11 +1,20 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
+import React, {useState} from 'react';
+
+import { StyleSheet, Text, View, Button, TextInput, ScrollView, FlatList } from 'react-native';
+import MainNavigator from './navigation/MainNavigation'
+
 
 export default function App() {
+
   return (
-    <View style={{padding:50}}>
-     <Text>INICIANDO</Text>
-    </View>
+    <MainNavigator />
   );
 }
+
+const styles = StyleSheet.create({
+  inputContainer:{
+    borderColor: 'black',
+    borderWidth:1,
+    padding:10
+  }
+})
