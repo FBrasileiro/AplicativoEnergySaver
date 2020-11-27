@@ -39,11 +39,14 @@ export default class LoginScreen extends Component{
     }
 
     loginHandler = () =>{
-        if(this.state.password == '' && this.state.email == ''){
+        const pass = this.state.password;
+        if(pass == '' || this.state.email == ''){
             alert("Por favor preencha os campos");
             return;
         }
-        authActions.login(this.state.email, this.state.password, this.props).catch(err=> console.log(err));
+        this.setState({password:''})
+        authActions.login(this.state.email, pass, this.props).catch(err=> console.log(err));
+    
     }
 
     log = () => {
