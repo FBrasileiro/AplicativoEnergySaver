@@ -15,7 +15,8 @@ export const login = async (email, password, {navigation}) => {
         email:email, password:password
     })).then(response=>{
         if(response.data.token){
-            AsyncStorage.setItem('token', response.data.token).then(user=>{
+            AsyncStorage.setItem('token', response.data.token)
+            AsyncStorage.setItem('id', response.data._id).then(user=>{
                 navigation.navigate('Main');
             })
         }
