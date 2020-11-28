@@ -21,7 +21,6 @@ export default class LoginScreen extends Component{
 
     componentDidMount(){
         AsyncStorage.getItem('token').then(user => {
-            console.log(user)
             if (user) {
               this.props.navigation.navigate('Main');
             }
@@ -45,7 +44,8 @@ export default class LoginScreen extends Component{
             return;
         }
         this.setState({password:''})
-        authActions.login(this.state.email, pass, this.props).catch(err=> console.log(err));
+        authActions.login(this.state.email, pass, this.props)
+        .catch(err=> console.log(err));
     
     }
 
