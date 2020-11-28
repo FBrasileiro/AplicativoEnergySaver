@@ -12,7 +12,7 @@ export default class GraficoLinhas extends Component{
             <LineChart data={{
                 labels:['J','F','M', 'A','M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
                 datasets:[{
-                    data: [20, 10, 5, 0, 0, 100, 200, 3, 10, 10, 20, 50],
+                    data: this.props.data,
                     strokeWidth: 2,
                 }]
             }}

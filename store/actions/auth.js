@@ -11,15 +11,15 @@ export const signup = async (name, email, password, passwordConfirm) => {
 
 
 export const login = async (email, password, {navigation}) => {
-    await api.post('auth/login', JSON.stringify({
+    api.post('auth/login', JSON.stringify({
         email:email, password:password
     })).then(response=>{
-        if(response.data.token){
-            AsyncStorage.setItem('token', response.data.token)
-            AsyncStorage.setItem('id', response.data._id).then(user=>{
-                navigation.navigate('Main');
-            })
-        }
+        AsyncStorage.multiSet([['token', response.data.token],
+                                ['username', response.data.username],
+                                ['id', response.data._id]]).then(()=>{
+                                    console.log("Teste")
+                                    navigation.navigate('Main');
+                                })
     })
     .catch(err=>{
         if(err.response.status === 401){
