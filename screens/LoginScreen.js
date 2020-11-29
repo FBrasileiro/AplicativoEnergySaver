@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, TextInput, ScrollView, Keyboard, 
     KeyboardAvoidingView, StyleSheet, Button, Image, 
-    TouchableWithoutFeedback
  } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { LinearGradient } from 'expo-linear-gradient'
@@ -17,8 +16,6 @@ export default class LoginScreen extends Component{
             password:""
         }
     }
-
-
     componentDidMount(){
         AsyncStorage.getItem('token').then(user => {
             if (user) {
@@ -57,7 +54,7 @@ export default class LoginScreen extends Component{
     render(){
         return(
             
-            // <KeyboardAvoidingView behavior="height" keyboardVerticalOffset={0} style={this.styles.screen}>
+            <KeyboardAvoidingView behavior="height" keyboardVerticalOffset={0} style={this.styles.screen}>
                 <LinearGradient colors={[Colors.bg1, Colors.bg2]} style={this.styles.gradient}>
             <Image style={{width: 70, height: 70, padding:70, marginTop: -100, marginBottom:50}} // icone: https://www.jing.fm/iclipt/obJiTi/
             source={require('../assets/Icone.png')}/>
@@ -83,12 +80,12 @@ export default class LoginScreen extends Component{
                     <Button title="Login" color={Colors.dblue} onPress={()=>{this.loginHandler()}}/>
                 </View>
                 <View style={this.styles.buttonContainer}>
-                    <Button title="Switch to Sign Up" color={Colors.dyellow} onPress={()=>{}}/>
+                    <Button title="Registrar" color={Colors.dyellow} onPress={()=>{this.props.navigation.navigate('Register')}}/>
                 </View>
                 
             </Card>
             </LinearGradient>
-            // </KeyboardAvoidingView>
+            </KeyboardAvoidingView>
         );
     }
 

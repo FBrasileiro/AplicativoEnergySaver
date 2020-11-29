@@ -67,17 +67,17 @@ const BottomNavigator = createBottomTabNavigator({
 
 
 const MainNavigator = createStackNavigator({
-    // Register:{
-    //   navigationOptions: {
-    //       headerShown: false,
-    //     },
-    //   screen:RegisterScreen,
-    // },
     Login:{
         navigationOptions: {
             headerShown: false,
           },
         screen:LoginScreen,
+    },
+    Register:{
+      navigationOptions: {
+          title:'Registrar'
+        },
+      screen:RegisterScreen,
     },
     Main: {
         navigationOptions: {
