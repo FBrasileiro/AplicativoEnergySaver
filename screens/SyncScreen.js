@@ -62,10 +62,10 @@ export default class DataScreen extends Component{
                     Colors.bg2,
                     ]} style={this.styles.gradient}>
                         <View style={this.styles.container}>
-                        <Button title="Sincronizar" onPress={()=>{alert("Nao implementado")}}/>
+                        <Button title="Sincronizar" onPress={()=>{this.getApiData()}}/>
                         <FlatList 
                             data={this.state.data}
-                            keyExtractor={(item, index)=>{item._id}}
+                            keyExtractor={(item, index)=>`${item._id}`}
                             renderItem={(itemData) => 
                                 <TouchableNativeFeedback 
                                 onLongPress={async ()=>{
@@ -85,7 +85,7 @@ export default class DataScreen extends Component{
                                             flexDirection: 'row',
                                             alignItems: 'center',
                                         }}>
-                                            <Octicons size={20} name="circuit-board" style={{marginLeft: 20}}/>
+                                            <Octicons size={20} color={itemData.item.color} name="circuit-board" style={{marginLeft: 20}}/>
                                             <Text style={{fontSize:20, marginLeft:10}}>{itemData.item.name}</Text>
                                         </View>
                                         <View style={{
@@ -111,10 +111,15 @@ export default class DataScreen extends Component{
             width:'80%',
             maxWidth: 400,
             padding: 20,
-            maxHeight: 400,
+            height:'80%',
+            maxHeight: Dimensions.get('screen').height * 0.9,
             justifyContent: 'center',
             alignItems:'center',
             marginTop:'20%',
+            // borderColor:'#ccc',
+            // borderWidth:1,
+            // borderRadius:80,
+            // backgroundColor:Colors.bg1
         },
         gradient:{
             flex:1,

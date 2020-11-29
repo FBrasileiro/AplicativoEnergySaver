@@ -1,11 +1,10 @@
-import React, {Component, useState, useEffect} from 'react';
-
-
-import {View, Text, StyleSheet, Button, FlatList, ScrollView} from 'react-native';
+import React, {Component} from 'react';
+import {View, Text, StyleSheet, Button, Dimensions, TouchableNativeFeedback} from 'react-native';
 import api from '../api'
+import {logout} from '../store/actions/auth'
 import Card from '../components/UI/Card'
-import RefreshButton from '../components/UI/RefreshButton'
 import CardHeader from '../components/UI/CardHeader'
+import RefreshButton from '../components/UI/RefreshButton'
 import { LinearGradient } from 'expo-linear-gradient'
 import Colors from '../constants/Colors'
 import GraficoLinhas from '../components/Graficos/GraficoLinhas'
@@ -35,6 +34,9 @@ export default class MainScreen extends Component{
             this.getApiData();
         }).catch(err=> console.log(err))
     }
+    logoutHandler = () => {
+        logout(this.props.navigation);
+    }
 
     getApiData = () => {
         api.get('user/getUserData', {
@@ -50,7 +52,10 @@ export default class MainScreen extends Component{
             console.log(this.handleData(data.data.message))
         })
         .catch(err=>{
-            console.log(JSON.parse(err.response.request._response).message)
+            if(JSON.parse(err.response.request._response).message){
+                if(JSON.parse(err.response.request._response).message === "The user does no longer exists") this.logoutHandler()
+            }
+            
         })
     }
 
@@ -82,11 +87,28 @@ export default class MainScreen extends Component{
             <RefreshButton onPress={this.getApiData}>Consumo Anual</RefreshButton>
                 <Text style={{fontSize:20, padding:10}}>{this.state.anual} kW/h</Text>
             </Card>
-            <Card style={{padding:20, marginTop:'10%'}}>
-                {/* <Button title="Refresh" onPress={this.getApiData}/> */}
-               
-                <GraficoLinhas data={this.data} label={['J','F','M','A','M','J','J','A','S','O','N','D']}/>
-                <Button title="Mais Info" onPress={this.chartHandle}/>
+            <Card style={{marginTop:'10%', borderColor:'#ccc', borderWidth:1}}>
+                <CardHeader 
+                mes={2020}
+                width={Dimensions.get('screen').width * 0.9}
+                maxWidth={Dimensions.get('screen').width * 0.9}
+                color_left="gray"
+                colorR="gray"
+                />
+                <View style={{alignItems:'center'}}>
+                    <GraficoLinhas data={this.data} label={['J','F','M','A','M','J','J','A','S','O','N','D']}/>
+                </View>
+                <TouchableNativeFeedback onPress={this.chartHandle}>
+                    <View style={{
+                        backgroundColor:Colors.bg1, 
+                        alignItems:'center',
+                        padding:6,
+                        borderBottomLeftRadius: 10,
+                        borderBottomRightRadius: 10
+                        }}>
+                        <Text style={{fontSize:18}}>Detalhes</Text>
+                    </View>
+                </TouchableNativeFeedback>
             </Card>
             </LinearGradient>
             </View>
