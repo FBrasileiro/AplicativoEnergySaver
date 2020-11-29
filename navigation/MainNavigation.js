@@ -11,6 +11,22 @@ import RegisterScreen from '../screens/RegisterScreen'
 import MainScreen from '../screens/MainScreen'
 import SyncScreen from '../screens/SyncScreen'
 import ProfileScreen from '../screens/ProfileScreen'
+import ChartScreen from '../screens/ChartScreen'
+
+const ChartNavigator = createStackNavigator({
+  Main:{
+    navigationOptions: {
+      headerShown: false,
+    },
+    screen:MainScreen,
+  },
+  Chart:{
+    navigationOptions: {
+      title: 'Detalhes'
+    },
+    screen:ChartScreen
+  }
+});
 
 const BottomNavigator = createBottomTabNavigator({
   Sync:{
@@ -23,7 +39,7 @@ const BottomNavigator = createBottomTabNavigator({
     }
   },
   Main:{
-    screen:MainScreen,
+    screen:ChartNavigator,
     navigationOptions:{
       tabBarLabel:"Home",
       tabBarIcon: (tabInfo) => {
@@ -32,7 +48,7 @@ const BottomNavigator = createBottomTabNavigator({
     }
   },
   Profile:{
-    screen:MainScreen,
+    screen:ProfileScreen,
     navigationOptions:{
       tabBarLabel:"Perfil",
       tabBarIcon: (tabInfo) => {
@@ -48,7 +64,7 @@ const BottomNavigator = createBottomTabNavigator({
   }
 },);
 
-BottomNavigator
+
 
 const MainNavigator = createStackNavigator({
     // Register:{

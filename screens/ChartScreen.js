@@ -1,7 +1,7 @@
-import React, {Component, useState, useEffect} from 'react';
+import React, {Component} from 'react';
+import {logout} from '../store/actions/auth'
 
-
-import {View, Text, StyleSheet, Button, FlatList, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, Button, FlatList, ScrollView, Dimensions} from 'react-native';
 import api from '../api'
 import Card from '../components/UI/Card'
 import RefreshButton from '../components/UI/RefreshButton'
@@ -14,9 +14,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 export default class MainScreen extends Component{
     constructor(props){
         super(props);
+        this.meses=['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
         this.data=[0,0,0,0,0,0,0,0,0,0,0,0]
         this.state = {
-            anual:0,
+            n_mes:new Date().getMonth(),
+            mensal:0,
             username:'',
             id:'',
             token:'',
@@ -26,9 +28,7 @@ export default class MainScreen extends Component{
     }
 
     componentDidMount(){
-
         AsyncStorage.multiGet(['username', 'id', 'token'],).then(user_info=>{
-            // console.log(user_info)
             this.setState({username:user_info[0][1]})
             this.setState({id:user_info[1][1]})
             this.setState({token:user_info[2][1]})
@@ -54,6 +54,9 @@ export default class MainScreen extends Component{
         })
     }
 
+    logoutHandler = () => {
+        logout(this.props.navigation);
+    }
 
     handleData = (data) => {
         var provisorio = [0,0,0,0,0,0,0,0,0,0,0,0]
@@ -66,28 +69,28 @@ export default class MainScreen extends Component{
         })
         this.setState({g_data:this.data})
         this.data.map(el=>aux+=el)
-        this.setState({anual:aux})
+        this.setState({mensal:aux})
     }
 
-    chartHandle = () =>{
-        this.props.navigation.navigate('Chart')
-    }
 
     render(){
         return(
             <View style={{flex: 1}}>
             <LinearGradient colors={[Colors.bg2, Colors.bg1, Colors.bg2]} style={this.styles.gradient}>
-            
+            <ScrollView contentContainerStyle={{
+                justifyContent: 'flex-start',
+                alignItems:'center',
+            }}>
+
             <Card style={this.styles.container}>
-            <RefreshButton onPress={this.getApiData}>Consumo Anual</RefreshButton>
-                <Text style={{fontSize:20, padding:10}}>{this.state.anual} kW/h</Text>
+            <RefreshButton onPress={this.getApiData}>Consumo Mensal</RefreshButton>
+                <Text style={{fontSize:20, padding:10}}>{this.state.mensal} kW/h</Text>
             </Card>
-            <Card style={{padding:20, marginTop:'10%'}}>
-                {/* <Button title="Refresh" onPress={this.getApiData}/> */}
-               
-                <GraficoLinhas data={this.data} label={['J','F','M','A','M','J','J','A','S','O','N','D']}/>
-                <Button title="Mais Info" onPress={this.chartHandle}/>
+            <Card style={{marginTop: 30}}>
+                <CardHeader mes={this.meses[this.state.n_mes]} />
+                <GraficoLinhas data={this.data}/>
             </Card>
+            </ScrollView>
             </LinearGradient>
             </View>
         );
@@ -108,8 +111,11 @@ export default class MainScreen extends Component{
             flex:1,
             width: '100%',
             height: '100%',
-            justifyContent: 'flex-start',
-            alignItems:'center',
         },
+        chartCard:{
+            padding:20, 
+            marginTop:'10%',
+            maxWidth: Dimensions.get('window').width *0.8
+        }
     })
 }
