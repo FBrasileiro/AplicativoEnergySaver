@@ -10,7 +10,7 @@ export default class GraficoLinhas extends Component{
     render(){
         return(
             <LineChart data={{
-                labels:['J','F','M', 'A','M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
+                labels:this.props.label,
                 datasets:[{
                     data: this.props.data,
                     strokeWidth: 2,

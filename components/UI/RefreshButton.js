@@ -11,7 +11,7 @@ export default class RefreshButton extends Component {
     render(){
         return(
             <View style={{justifyContent:'space-between', flexDirection:'row', alignContent:'center'}}>
-                <Text style={{fontSize:20, paddingVertical:10, marginLeft:20,paddingHorizontal:50}}>Consumo Anual</Text>
+                <Text style={{fontSize:20, paddingVertical:10, marginLeft:20,paddingHorizontal:40}}>{this.props.children}</Text>
                 <TouchableOpacity activeOpacity={0.8}
                  style={{
                     backgroundColor:Colors.bg1, 
