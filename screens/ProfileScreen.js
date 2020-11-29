@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { View, Text, StyleSheet, Button } from 'react-native'
+import { View, Text, StyleSheet, Button, TouchableNativeFeedback, Dimensions } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { LinearGradient } from 'expo-linear-gradient'
 import Colors from '../constants/Colors'
@@ -14,7 +14,8 @@ export default class DataScreen extends Component{
             username:'',
             id:'',
             token:'',
-            nome:'',
+            name:'',
+            email:'',
 
         }
     }
@@ -35,15 +36,22 @@ export default class DataScreen extends Component{
     }
 
     getApiData = () => {
+        console.log(this.state.token)
         api.get('user/getUserInfo', {
-            header:{authorization:this.state.token},
+            headers:{
+                authorization: this.state.token
+            },
             params:{
-                username:this.state.username,
                 user_id:this.state.id,
+                username:this.state.username,
             }
         }).then(data=>{
-            console.log(data)
-        }).catch(err=>console.log(err))
+            this.setState({name:data.data.user.name})
+            this.setState({email:data.data.user.email})
+            console.log(data.data)
+        }).catch(err=>{
+            console.log(err)
+        })
     }
 
 
@@ -56,13 +64,44 @@ export default class DataScreen extends Component{
                     Colors.bg2,
                     ]} style={this.styles.gradient}>
                         <Card style={this.styles.container}>
-                            <Text>Perfil</Text>
-                            <Text>{this.state.username}</Text>
-                            <Text>{this.state.id}</Text>
-                            <Text>{}</Text>
-                            <Button title="Deslogar" onPress={this.logoutHandler}/>
-                        </Card>
+                            <View style={{alignContent:'flex-start'}}>
+                                <TouchableNativeFeedback onPress={()=>{this.logoutHandler()}}>
+                                    <View style={this.styles.logoutBtn}>
+                                        <Text>Deslogar</Text>
+                                    </View>
+                                </TouchableNativeFeedback>
+                                <View style={this.styles.infoContainer}>
+                                        <Text style={{padding:5, fontSize:18}}>Nome: </Text>
+                                        <Text style={{padding:5, fontSize:15}}>{this.state.name}</Text>
+                                </View>
+                                <View style={this.styles.infoContainer}>
+                                        <Text style={{padding:5, fontSize:18}}>Username: </Text>
+                                        <Text style={{padding:5, fontSize:15}}>{this.state.username}</Text>
+                                </View>
+                                <View style={this.styles.infoContainer}>
+                                        <Text style={{padding:5, fontSize:18}}>Email: </Text>
+                                        <Text style={{padding:5, fontSize:15}}>{this.state.email}</Text>
+                                </View>
+                                <View style={this.styles.infoContainer}>
+                                        <Text style={{padding:5, fontSize:18}}>ID: </Text>
+                                        <Text style={{padding:5, fontSize:15}}>{this.state.id}</Text>
+                                </View>
+                                <TouchableNativeFeedback onPress={()=>{console.log("Apertou")}}>
+                                    <View style={{
+                                            alignItems:'center', 
+                                            padding:15,
+                                            width:Dimensions.get('window').width * 0.8,
+                                            borderBottomEndRadius:10,
+                                            borderBottomStartRadius:10,
+                                            backgroundColor:Colors.bg1
+                                        }}>
+                                        <Text>Mudar Informações</Text>
+                                    </View>
+                                </TouchableNativeFeedback>
+                            </View>
 
+                            
+                        </Card>
                 </LinearGradient>
             </View>
         );
@@ -70,6 +109,7 @@ export default class DataScreen extends Component{
 
     styles = StyleSheet.create({
         container:{
+            paddingBottom:0,
             width:'80%',
             maxWidth: 400,
             padding: 20,
@@ -79,11 +119,33 @@ export default class DataScreen extends Component{
             marginTop:'20%',
         },
         gradient:{
-            flex:1,
+            paddingVertical:"20%",
+            flex:2,
             width: '100%',
             height: '100%',
             justifyContent: 'flex-start',
             alignItems:'center',
         },
+        infoContainer:{
+            paddingHorizontal:10,
+            flexDirection:'row',
+            alignItems:'center',
+            justifyContent:'space-between',
+            borderColor:'#ccc',
+            borderBottomWidth:1,
+            marginBottom:10
+        },
+        logoutBtn:{ 
+            padding:10,
+            backgroundColor:'rgba(255,0,0,0.75)',
+            height:40,
+            justifyContent:'center',
+            alignItems:'center',
+            width: 100,
+            marginLeft:"70%",
+            paddingRight:10,
+            borderRadius:10,
+            marginBottom:15,
+        }
     })
 }
