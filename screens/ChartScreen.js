@@ -17,6 +17,7 @@ export default class MainScreen extends Component{
         super(props);
         this.meses=['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
         this.data=[0,0,0,0,0,0,0,0,0,0,0,0]
+        this.empty = []
         this.state = {
             n_mes:new Date().getMonth(),
             mensal:0,
@@ -26,7 +27,8 @@ export default class MainScreen extends Component{
             g_data:[],
             data: [],
             chart_data_n:[],
-            chart_data: []
+            chart_data: [],
+            press: 0
         }
     }
 
@@ -89,6 +91,7 @@ export default class MainScreen extends Component{
             }
         })
         .then(data=>{
+            console.log(data.data.synced.devices)
             this.setState({chart_data_n: data.data.synced.devices})
             this.handleChartData()
         })
@@ -114,18 +117,23 @@ export default class MainScreen extends Component{
             })
             .then(data=>{
                 var valor = 0
+                // console.log(data.data.synced.data)
                 data.data.synced.data.map(el=>{
                     if(this.state.n_mes == new Date(el.data.date).getMonth()){
                         valor+=el.data.consume
                     }
                 })
+                // console.log(data.data.synced.data)
                 if(this.state.n_mes == new Date(data.data.synced.data[0].data.date).getMonth())
-                this.createChart(data.data.synced.data[0].device_name, valor, data.data.synced.data[0].device_color)
+                this.createChart(
+                    data.data.synced.data[0].device_name,
+                    data.data.synced.data[0].device_id,
+                    valor, data.data.synced.data[0].device_color)
             }).catch(err=>{})
         })
     }
 
-    createChart = (name, population, color) => {
+    createChart = (name, id, population, color) => {
         // console.log(name, population, color)
         var data = {
             name,
@@ -134,15 +142,16 @@ export default class MainScreen extends Component{
             legendFontColor: '#7F7F7F',
             legendFontSize: 15,
         }
-        if(!this.state.chart_data)
-            this.setState({chart_data:[data]})
-        else
-            this.setState({chart_data:[...this.state.chart_data, data]})
+
+        this.setState({chart_data:[...this.state.chart_data, data]})
+
         // console.log(this.state.chart_data)
     }
 
 
     handleNextBack = (dir) => {
+        if(this.state.press + 1500 > new Date().getTime()) return
+        this.setState({press:new Date().getTime()})
         var aux = this.state.n_mes;
         if((this.state.n_mes === 11 && dir === 1) ||
             this.state.n_mes === 0 && dir === -1 ||
@@ -151,7 +160,7 @@ export default class MainScreen extends Component{
         // ou menor que janeiro
         this.setState({n_mes:aux+dir})
         this.setState({mensal:this.state.g_data[aux+dir]})
-        this.setState({chart_data:[]})
+        this.setState({chart_data:this.empty})
         this.getChartData();
         console.log(this.state.chart_data)
 

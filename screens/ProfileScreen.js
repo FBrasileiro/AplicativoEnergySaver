@@ -64,7 +64,7 @@ export default class DataScreen extends Component{
                     Colors.bg2,
                     ]} style={this.styles.gradient}>
                         <Card style={this.styles.container}>
-                            <View style={{alignContent:'flex-start'}}>
+                            <View style={{alignContent:'flex-start', maxWidth:Dimensions.get('window').width*0.8}}>
                                 <TouchableNativeFeedback onPress={()=>{this.logoutHandler()}}>
                                     <View style={this.styles.logoutBtn}>
                                         <Text>Deslogar</Text>
@@ -72,19 +72,19 @@ export default class DataScreen extends Component{
                                 </TouchableNativeFeedback>
                                 <View style={this.styles.infoContainer}>
                                         <Text style={{padding:5, fontSize:18}}>Nome: </Text>
-                                        <Text style={{padding:5, fontSize:15}}>{this.state.name}</Text>
+                                        <Text style={{padding:5, fontSize:13}}>{this.state.name}</Text>
                                 </View>
                                 <View style={this.styles.infoContainer}>
-                                        <Text style={{padding:5, fontSize:18}}>Username: </Text>
-                                        <Text style={{padding:5, fontSize:15}}>{this.state.username}</Text>
+                                        <Text style={{padding:5, fontSize:18}}>Usuário: </Text>
+                                        <Text style={{padding:5, fontSize:13}}>{this.state.username}</Text>
                                 </View>
                                 <View style={this.styles.infoContainer}>
                                         <Text style={{padding:5, fontSize:18}}>Email: </Text>
-                                        <Text style={{padding:5, fontSize:15}}>{this.state.email}</Text>
+                                        <Text style={{padding:5, fontSize:13}}>{this.state.email}</Text>
                                 </View>
                                 <View style={this.styles.infoContainer}>
                                         <Text style={{padding:5, fontSize:18}}>ID: </Text>
-                                        <Text style={{padding:5, fontSize:15}}>{this.state.id}</Text>
+                                        <Text style={{padding:5, fontSize:13}}>{this.state.id}</Text>
                                 </View>
                                 <TouchableNativeFeedback onPress={()=>{console.log("Apertou")}}>
                                     <View style={{
