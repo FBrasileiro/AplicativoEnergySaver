@@ -13,6 +13,8 @@ import SyncScreen from '../screens/SyncScreen'
 import ProfileScreen from '../screens/ProfileScreen'
 import ChartScreen from '../screens/ChartScreen'
 
+
+
 const ChartNavigator = createStackNavigator({
   Main:{
     navigationOptions: {

@@ -7,6 +7,8 @@ import { LinearGradient } from 'expo-linear-gradient'
 import Card from '../components/UI/Card'
 import Colors from '../constants/Colors'
 import * as authActions from '../store/actions/auth'
+import FlashMessage from 'react-native-flash-message'
+import * as MessageBox from '../functions/MessageBox'
 
 export default class LoginScreen extends Component{
     constructor(props){
@@ -25,37 +27,32 @@ export default class LoginScreen extends Component{
     }
 
     setEmail = (email) => {
-        console.log(email)
         this.setState({email})
     }
 
     setPassword = (password) => {
-        console.log(password)
         this.setState({password})
     }
 
     loginHandler = () =>{
         const pass = this.state.password;
         if(pass == '' || this.state.email == ''){
-            alert("Por favor preencha os campos");
+            MessageBox.Aviso('Atenção', 'Os campos devem ser preenchidos')
             return;
         }
         this.setState({password:''})
         authActions.login(this.state.email, pass, this.props)
-        .catch(err=> console.log(err));
+        .catch(err=> MessageBox.Erro('Erro', err.message));
     
     }
 
-    log = () => {
-        console.log(this.state.email);
-        console.log(this.state.password);
-    }
     
     render(){
         return(
             
-            <KeyboardAvoidingView behavior="height" keyboardVerticalOffset={0} style={this.styles.screen}>
+            // <KeyboardAvoidingView>
                 <LinearGradient colors={[Colors.bg1, Colors.bg2]} style={this.styles.gradient}>
+                <FlashMessage position="top"/>
             <Image style={{width: 70, height: 70, padding:70, marginTop: -100, marginBottom:50}} // icone: https://www.jing.fm/iclipt/obJiTi/
             source={require('../assets/Icone.png')}/>
             <Card style={this.styles.authContainer}>
@@ -85,7 +82,7 @@ export default class LoginScreen extends Component{
                 
             </Card>
             </LinearGradient>
-            </KeyboardAvoidingView>
+            //</KeyboardAvoidingView>
         );
     }
 

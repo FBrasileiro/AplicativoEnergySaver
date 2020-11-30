@@ -11,6 +11,9 @@ import Colors from '../constants/Colors'
 import GraficoLinhas from '../components/Graficos/GraficoLinhas'
 import GraficoPizza from '../components/Graficos/GraficoPizza'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import FlashMessage, {showMessage, hideMessage} from 'react-native-flash-message'
+import * as MessageBox from '../functions/MessageBox'
+
 
 export default class MainScreen extends Component{
     constructor(props){
@@ -39,14 +42,14 @@ export default class MainScreen extends Component{
             this.setState({token:user_info[2][1]})
             this.getApiData();
             this.getChartData();
-        }).catch(err=> console.log(err))
+        }).catch(err=> MessageBox.Erro('Erro', err.message))
     }
 
     refreshHandle = () => {
         this.getApiData();
         this.setState({chart_data:[]})
         this.getChartData();
-        console.log(this.state.chart_data)
+        // console.log(this.state.chart_data)
     }
 
     getApiData = () => {
@@ -63,7 +66,10 @@ export default class MainScreen extends Component{
             this.handleData(data.data.message)
         })
         .catch(err=>{
-            console.log(JSON.parse(err.response.request._response).message)
+            if(JSON.parse(err.response.request._response).message)
+                MessageBox.Erro('Erro', JSON.parse(err.response.request._response).message)
+            else
+                MessageBox.Erro('Erro', err.message)
         })
     }
 
@@ -91,12 +97,15 @@ export default class MainScreen extends Component{
             }
         })
         .then(data=>{
-            console.log(data.data.synced.devices)
+            // console.log(data.data.synced.devices)
             this.setState({chart_data_n: data.data.synced.devices})
             this.handleChartData()
         })
         .catch(err=>{
-            console.log(err)
+            if(JSON.parse(err.response.request._response).message)
+                MessageBox.Erro('Erro', JSON.parse(err.response.request._response).message)
+            else
+                MessageBox.Erro('Erro', err.message)
         })
     }
 
@@ -129,7 +138,12 @@ export default class MainScreen extends Component{
                     data.data.synced.data[0].device_name,
                     data.data.synced.data[0].device_id,
                     valor, data.data.synced.data[0].device_color)
-            }).catch(err=>{})
+            }).catch(err=>{
+                if(JSON.parse(err.response.request._response).message)
+                    MessageBox.Erro('Erro', JSON.parse(err.response.request._response).message)
+                else
+                    MessageBox.Erro('Erro', err.message)
+            })
         })
     }
 
@@ -162,7 +176,7 @@ export default class MainScreen extends Component{
         this.setState({mensal:this.state.g_data[aux+dir]})
         this.setState({chart_data:this.empty})
         this.getChartData();
-        console.log(this.state.chart_data)
+        // console.log(this.state.chart_data)
 
     }
 

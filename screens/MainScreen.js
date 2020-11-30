@@ -9,6 +9,8 @@ import { LinearGradient } from 'expo-linear-gradient'
 import Colors from '../constants/Colors'
 import GraficoLinhas from '../components/Graficos/GraficoLinhas'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import FlashMessage, {showMessage, hideMessage} from 'react-native-flash-message'
+import * as MessageBox from '../functions/MessageBox'
 
 export default class MainScreen extends Component{
     constructor(props){
@@ -53,7 +55,10 @@ export default class MainScreen extends Component{
         })
         .catch(err=>{
             if(JSON.parse(err.response.request._response).message){
-                if(JSON.parse(err.response.request._response).message === "The user does no longer exists") this.logoutHandler()
+                if(JSON.parse(err.response.request._response).message === "The user does no longer exists"){
+                    MessageBox.Erro('Erro', 'O usuario não existe mais')
+                    this.logoutHandler()
+                }
             }
             
         })
@@ -82,7 +87,7 @@ export default class MainScreen extends Component{
         return(
             <View style={{flex: 1}}>
             <LinearGradient colors={[Colors.bg2, Colors.bg1, Colors.bg2]} style={this.styles.gradient}>
-            
+            <FlashMessage position="top"/>
             <Card style={this.styles.container}>
             <RefreshButton onPress={this.getApiData}>Consumo Anual</RefreshButton>
                 <Text style={{fontSize:20, padding:10}}>{this.state.anual} kW/h</Text>

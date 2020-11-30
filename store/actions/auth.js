@@ -1,5 +1,6 @@
 import api from '../../api'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import * as MessageBox from '../../functions/MessageBox'
 
 export const signup = async (name, email, password, passwordConfirm) => {
     let response = await api.post('auth/signup', JSON.stringify({
@@ -23,7 +24,7 @@ export const login = async (email, password, {navigation}) => {
     })
     .catch(err=>{
         if(err.response.status === 401){
-            alert("Usuario ou senha incorretos")
+            MessageBox.Aviso("Atenção", "Usuario ou senha incorretos")
         }
     })
 }

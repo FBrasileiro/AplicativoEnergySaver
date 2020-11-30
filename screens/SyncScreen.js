@@ -7,6 +7,8 @@ import {Octicons} from 'react-native-vector-icons'
 import api from '../api'
 import Card from '../components/UI/Card'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import FlashMessage, {showMessage, hideMessage} from 'react-native-flash-message'
+import * as MessageBox from '../functions/MessageBox'
 
 export default class DataScreen extends Component{
     constructor(props){
@@ -27,7 +29,7 @@ export default class DataScreen extends Component{
             this.setState({id:user_info[1][1]})
             this.setState({token:user_info[2][1]})
             this.getApiData();
-        }).catch(err=> console.log(err))
+        }).catch(err=> MessageBox.Erro('Erro', err.message))
     }
 
     getApiData = () => {
@@ -44,7 +46,10 @@ export default class DataScreen extends Component{
             this.handleData(data.data)
         })
         .catch(err=>{
-            console.log(JSON.parse(err.response.request._response).message)
+            if(JSON.parse(err.response.request._response).message)
+                MessageBox.Erro('Erro', JSON.parse(err.response.request._response).message)
+            else
+                MessageBox.Erro('Erro', err.message)
         })
     }
 
@@ -61,6 +66,7 @@ export default class DataScreen extends Component{
                     Colors.bg1,
                     Colors.bg2,
                     ]} style={this.styles.gradient}>
+                        <FlashMessage position="top"/>
                         <View style={this.styles.container}>
                         <Button title="Sincronizar" onPress={()=>{this.getApiData()}}/>
                         <FlatList 
